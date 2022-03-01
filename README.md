@@ -6,8 +6,16 @@
 
 ## Installing from pip
 
+pip 安装
+
 ```shell
 pip install fileblock
+```
+
+清华源安装
+
+```shell
+pip install fileblock -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 ## How to use
