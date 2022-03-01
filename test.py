@@ -2,14 +2,15 @@ import fileblock as fb
 from fileblock import Block
 
 root = fb.Block("./")
-tp = root.append("a/c/b", fb.FILE)
-tp.copyTo(Block("./test_dir"))
+print(root.btype)
+# tp = root.append("a/c/b", fb.FILE)
+# tp.copyTo(Block("./test_dir"))
 
-print(tp.isfile)
+# print(tp.isfile)
 
-Block("./a").copyTo(Block("./test_dir"))
+# Block("./a").copyTo(Block("./test_dir"))
 
-print(tp.leaves)
+# print(tp.leaves)
 
-children = root.leaves
-print(children.paths)
+# children = root.leaves
+# print(children.paths)

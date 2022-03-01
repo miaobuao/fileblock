@@ -177,7 +177,7 @@ class Block:
     
     @property
     def btype(self):
-        return "file" if self.isfile else "dir" if self.isdir else 'NULL'
+        return FILE if self.isfile else DIR if self.isdir else None
     
     @property
     def abstract(self):
