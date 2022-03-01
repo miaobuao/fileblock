@@ -7,6 +7,10 @@ path = os.path.join(CUR_PATH, "build")
 if os.path.isdir(path):
     print("INFO DEL DIR ", path)
     shutil.rmtree(path)
+path = os.path.join(CUR_PATH, "dist")
+if os.path.isdir(path):
+    print("INFO DEL DIR ", path)
+    shutil.rmtree(path)
 
 info = {}
 with open(os.path.join(CUR_PATH, "fileblock/__version__.py"), 'r+', encoding='utf8') as f:
