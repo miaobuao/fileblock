@@ -136,7 +136,7 @@ Block文件树的叶子节点构成的[Children](#children)集合
 ### Children
 
 *Children类继承自list*
-#### children.paths -> list[str]
+#### children.abspaths -> list[str]
 
 返回所有Block的绝对路径
 

@@ -1,6 +1,7 @@
 from os.path import split, splitext, isfile, exists, join, isdir, abspath
 from os import listdir, makedirs, mkdir, remove, rmdir
 from .Children import Children
+from .Abstrcat import Abstract
 from .btype import FILE, DIR
 import shutil
 
@@ -179,12 +180,8 @@ class Block:
     def btype(self):
         return FILE if self.isfile else DIR if self.isdir else None
     
-    @property
-    def abstract(self):
-        return {
-            "type": self.btype,
-            "path": self.path
-        }
+    def abstract(self, force_abspath=False):
+        return Abstract(self.btype, self.abspath if force_abspath else self.path)
 
     def __str__(self):
         # return "(%s block: %s)" % (self.btype, self.path)
