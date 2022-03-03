@@ -1,9 +1,9 @@
 Metadata-Version: 2.1
 Name: fileblock
-Version: 22.3.1.0.2
+Version: 1.1.0.2022.3.3
 Summary: simplify file processing
 Home-page: http://github.com/miaobuao/fileblock
-Author: 喵不嗷
+Author: 喵不嗷|miaobuao
 Author-email: 617802189@qq.com
 License: Apache 2.0
 Platform: UNKNOWN
@@ -21,8 +21,16 @@ License-File: LICENSE
 
 ## Installing from pip
 
+pip 安装
+
 ```shell
 pip install fileblock
+```
+
+清华源安装
+
+```shell
+pip install fileblock -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 ## How to use
@@ -107,9 +115,11 @@ Tips:
 
 **🌰举个例子:**
 
-rates为(x_1, x_2, x_3, x_4)时，会把block的children划分成4份，
+文件夹里如果有n个文件，想要划分成7:3，那参数就是7, 3，也就是block.cut(7, 3)
 
-令 m = sum(rates), 那么第i份占 x_i / m
+如果想要分成1:2:3，那就block.cut(1, 2, 3)
+
+返回值时一个列表，其中的元素是划分好的Children类型
 
 #### block.get_file_contents() -> bytes
 
@@ -141,7 +151,7 @@ Block文件树的叶子节点构成的[Children](#children)集合
 ### Children
 
 *Children类继承自list*
-#### children.paths -> list[str]
+#### children.abspaths -> list[str]
 
 返回所有Block的绝对路径
 

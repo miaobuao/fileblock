@@ -98,6 +98,17 @@ class Block:
                     if not exists(path):
                         makedirs(path)
 
+    def search(self, name, type=None)->Children:
+        '''
+            在block内进行搜索，返回所有匹配的文件/文件夹
+            
+            可选参数type的值应为 fileblock.FILE 或 fileblock.DIR
+        '''
+        leaves = self.leaves
+        return [
+            leaf for leaf in leaves
+            if name in split(leaf.path)[1] and ((type is not None and leaf.btype==type) or type is None)
+        ]
     
     @property
     def leaves(self) -> Children:

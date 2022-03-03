@@ -4,6 +4,7 @@
 
 简化文件处理 - *simplify file processing*
 
+<!-- [](https://github.com/miaobuao/fileblock/todo.md) -->
 ## Installing from pip
 
 pip 安装
@@ -151,16 +152,6 @@ c1 = Children()
 c2 = Children()
 c3 = c1 + c2 # type(c3) == Children
 ```
-
-## TODO LIST
-
-- [ ] save & load
-  - [ ] to_csv
-  - [ ] to_json
-  - [ ] to_pkl
-  - [ ] from_csv
-  - [ ] from_json
-  - [ ] from_pkl
 
 ## License
 
