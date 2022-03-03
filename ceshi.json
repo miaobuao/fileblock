@@ -1,0 +1,26 @@
+[
+  {
+    "type": "File",
+    "path": "./.gitignore"
+  },
+  {
+    "type": "File",
+    "path": "./build.bat"
+  },
+  {
+    "type": "File",
+    "path": "./LICENSE"
+  },
+  {
+    "type": "File",
+    "path": "./README.md"
+  },
+  {
+    "type": "File",
+    "path": "./setup.py"
+  },
+  {
+    "type": "File",
+    "path": "./test.py"
+  }
+]

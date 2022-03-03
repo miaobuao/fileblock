@@ -3,7 +3,7 @@ from os import listdir, makedirs, mkdir, remove, rmdir
 from .Children import Children
 from .btype import FILE, DIR
 import shutil
-
+from .Abstrcat import Abstract
 class Block:
 
     def __init__(self, path: str) -> None:
@@ -100,7 +100,9 @@ class Block:
     def btype(self):
         pass
     
-    @property
-    def abstract(self):
+    def abstract(self, force_abspath=False)->Abstract:
+        '''
+            返回一个Abstract对象,包含了该Block的基本文件信息
+        '''
         pass
 

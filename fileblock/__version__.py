@@ -1,6 +1,6 @@
 __title__ = 'fileblock'
 __description__ = 'simplify file processing'
-__version__ = '1.22.3.1.0.2'
+__version__ = '1.1.0.v2022.3.3'
 __url__ = "http://github.com/miaobuao/fileblock"
 __author__ = '喵不嗷|miaobuao'
 __author_email__ = '617802189@qq.com'

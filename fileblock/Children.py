@@ -2,8 +2,8 @@ from random import random
 import json
 
 class Children(list):
-
-    def to_json(self, path:str, file_only=False, dir_only=False, force_abspath=False):
+    
+    def to_json(self, path:str, file_only=False, dir_only=False, force_abspath=False, indent=None):
         '''
             file_only 和 dir_only 同时为 True 则 全都输出
         '''
@@ -26,11 +26,32 @@ class Children(list):
 
         data = convert(self)
         with open(path, "w+", encoding="utf8") as f:
-            json.dump(data, f)
+            json.dump(data, f, indent=indent)
         
-    
+    def unfold(self):
+        def proc(children):
+            if type(children[0]) == Children:
+                tmp = Children()
+                for child in children:
+                    tmp += proc(child)
+                return tmp
+            return children
+        res = proc(self)
+        return res
+
     def get_path(self, force_abspath = False, file_only=False):
         return [child.abspath if force_abspath else child.path for child in self]
+
+    @staticmethod
+    def make(*child):
+        def proc(children):
+            if hasattr(children[0], "__iter__"):
+                res = Children()
+                for child in children:
+                    res.append(proc(child))
+                return res
+            return Children(children)
+        return proc(child)
 
     @property
     def abspaths(self):
@@ -52,8 +73,7 @@ class Children(list):
 
 if __name__  == "__main__":
 
-    c = Children()
-    x = c + Children()
-
-    x.extend([1111])
+    c = Children([1, 2, 3])
+    x = c + Children([2, 3, 4])
+    print(x)
     
