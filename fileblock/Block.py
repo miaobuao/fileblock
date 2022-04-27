@@ -12,10 +12,34 @@ class Block:
         '''
             @parameter path - 文件/文件夹路径
         '''
-        self.path = path
-        self.abspath = abspath(path)
-        self.directory, self.file_full_name = split(path)
-        self.filename, self.extension = splitext(self.file_full_name)
+        self.__path = path
+    
+    def enter(self, path):
+        self.__path = self.join_path(path)
+    
+    @property
+    def path(self):
+        return self.__path
+    
+    @property
+    def abspath(self):
+        return abspath(self.path)
+    
+    @property
+    def directory(self):
+        return split(self.path)[0]
+    
+    @property
+    def file_full_name(self):
+        return split(self.path)[1]
+    
+    @property
+    def filename(self):
+        return splitext(self.file_full_name)[0]
+    
+    @property
+    def extension(self):
+        return splitext(self.file_full_name)[1]
     
     def sub_block(self, path: str):
         '''
@@ -62,9 +86,11 @@ class Block:
             else:
                 rmdir(self.path)
         else:
-            raise FileNotFoundError("文件/文件夹不存在时，无法执行remove()")
+            raise FileNotFoundError("文件/文件夹不存在时，无法执行block.remove()")
 
     def moveTo(self, target):
+        if type(target) == str:
+            target = Block(target)
         if not self.exists:
             raise FileNotFoundError(self.path, " not found! ")
         if not target.exists:
@@ -72,8 +98,11 @@ class Block:
         if not target.isdir:
             raise Exception(target.path, " is not a dir.")
         shutil.move(self.path, target.path)
-    
+        return self
+        
     def copyTo(self, target):
+        if type(target) == str:
+            target = Block(target)
         if not self.exists:
             raise FileNotFoundError(self.path, " not found! ")
         if not target.exists:
@@ -97,6 +126,7 @@ class Block:
                 else:
                     if not exists(path):
                         makedirs(path)
+        return self
 
     def search(self, name, type=None)->Children:
         '''
@@ -200,6 +230,11 @@ class Block:
     
     def __repr__(self) -> str:
         return self.__str__()
+
+    @property
+    def super_dir_name(self):
+        tmp = split(self.path)[0]
+        return split(tmp)[1]
 
 
 

@@ -4,10 +4,19 @@ from fileblock.Children import Children
 from fileblock.btype import FILE
 import json
 
+block = Block("D:/GO/1_17_6/api")
+print(block.leaves.super_dir_names)
 # root = fb.Block("./")
+# print(root.children.map(f))
 # print(fb.unfold(1, 2, [4], [6, [7, [10]]]))
 # print(root.children.to_json("./ceshi.json", file_only=True))
 # print(Children([root.children, Children([root.children]), root.children]).unfold())
+# root.children >> 2
+# print(fb.file_filter(root.children))
+# test_block = Block("./111")
+# print(test_block.children)
+# fb.remove(test_block)
+# print(fb.get_path(root.children))
 # tp = root.append("a/c/b", fb.FILE)
 # tp.copyTo(Block("./test_dir"))
 # print(FILE == FILE)

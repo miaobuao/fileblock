@@ -1,12 +1,19 @@
 from random import random
 import json
+from .btype import __BaseType__
 
 class Children(list):
-    
-    def to_json(self, path:str, file_only=False, dir_only=False, force_abspath=False, indent=None):
-        '''
-            file_only 和 dir_only 同时为 True 则 全都输出
-        '''
+
+    def map(self, fn):
+        def dfs(x):
+            return Children([
+                dfs(cell) if hasattr(cell, "__iter__") else fn(cell)
+                for cell in x
+            ])
+        return dfs(self)
+        
+    def to_json(self, path: str, file_only=False, dir_only=False, force_abspath = False, indent=None):
+        """注：若file_only 和 dir_only 同时为 True 则 全都输出."""
         def convert(child):
             if type(child) == Children:
                 res = []
@@ -39,9 +46,6 @@ class Children(list):
         res = proc(self)
         return res
 
-    def get_path(self, force_abspath = False, file_only=False):
-        return [child.abspath if force_abspath else child.path for child in self]
-
     @staticmethod
     def make(*child):
         def proc(children):
@@ -55,18 +59,19 @@ class Children(list):
 
     @property
     def abspaths(self):
-        return [child.abspath for child in self]
+        return Children([child.abspath for child in self])
     
-    @property
     def shuffle(self):
         res = self.copy()
-        index = []
         le = res.__len__()
         for i in range(1, le+1):
             idx = int(random() * (le - i))
-            index.append(idx)
             res[idx], res[le - i] = res[le - i], res[idx]
-        return res
+        return Children(res)
+    
+    @property
+    def super_dir_names(self):
+        return self.map(lambda x: x.super_dir_name)
 
     def __add__(self, x):
         return Children(super().__add__(x))

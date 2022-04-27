@@ -1,18 +1,30 @@
+
 class Children(list):
+
+    def map(self, fn)->Children:
+        pass
+        
+    def to_json(self, path: str, file_only=False, dir_only=False, force_abspath = False, indent=None)->None:
+        """注：若file_only 和 dir_only 同时为 True 则 全都输出."""
+        pass
+        
+    def unfold(self)->Children:
+        pass
+
+    @staticmethod
+    def make(*child)->Children:
+        pass
+
+    @property
+    def abspaths(self)->Children:
+        pass
+    
+    def shuffle(self)->Children:
+        pass
     
     @property
-    def paths(self) -> list[str]:
-        '''
-            返回所有Block的绝对路径
-        '''
+    def super_dir_names(self)->Children:
         pass
 
-    @property
-    def shuffle(self) ->Children:
-        '''
-        返回打乱顺序的Children，不改变本身内容
-        '''
-        pass
-
-    def __add__(self, x: Children) -> Children:
+    def __add__(self, x)->Children:
         pass

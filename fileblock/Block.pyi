@@ -6,7 +6,7 @@ import shutil
 from .Abstrcat import Abstract
 class Block:
 
-    def __init__(self, path: str) -> None:
+    def __init__(self, path: str):
         '''
             @parameter path - 文件/文件夹路径
         '''
@@ -43,10 +43,10 @@ class Block:
         '''
         pass
 
-    def moveTo(self, target)->None:
+    def moveTo(self, target: Block|str)->Block:
         pass
     
-    def copyTo(self, target: Block)->None:
+    def copyTo(self, target: Block|str)->Block:
         '''
             把Block及其Children都拷贝如target中
         '''
@@ -106,3 +106,6 @@ class Block:
         '''
         pass
 
+    @property
+    def super_dir_name(self)->str:
+        pass
