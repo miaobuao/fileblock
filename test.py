@@ -2,12 +2,14 @@ from posixpath import abspath
 from site import abs_paths
 import fileblock as fb
 from fileblock import Block
-from fileblock.Children import Children
+from fileblock.Children import Children, deep_maker
 from fileblock.btype import FILE
 import json
 
 block = Block("./")
-print(block.leaves.pop([1, [2, 3]]))
+# print(block.leaves.pop([1, [2, 3]]))
+deep_res = Children([1, 2, [3, 4]], deep_make=True)
+print(isinstance(deep_res.data[2], Children))
 # root = fb.Block("./")
 # print(root.children.map(f))
 # print(fb.unfold(1, 2, [4], [6, [7, [10]]]))

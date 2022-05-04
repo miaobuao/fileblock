@@ -2,11 +2,23 @@ from random import random
 import json
 from .btype import __BaseType__
 
+def deep_maker(x):
+    if hasattr(x, "__iter__"):
+        res = []
+        for cell in x:
+            res.append(deep_maker(cell))
+        return Children(res, copy=False, deep_make=False)
+    else:
+        return x
+
+
 class Children:
 
-    def __init__(self, data=[], copy=True):
+    def __init__(self, data=[], copy=True, deep_make=False):
         if isinstance(data, Children):
             data = data.data
+        if deep_make:
+            data = deep_maker(data)
         if copy:
             self.data = data.copy()
         else:
@@ -16,9 +28,9 @@ class Children:
     def map(self, fn):
         def dfs(x):
             return Children([
-                dfs(cell) if hasattr(cell, "__iter__") else fn(cell)
+                dfs(cell) if isinstance(x, Children) else fn(cell)
                 for cell in x
-            ])
+            ], copy=False, deep_make=False)
         return dfs(self)
         
 
@@ -47,19 +59,19 @@ class Children:
         
 
     def unfold(self):
-        def proc(children):
-            if type(children[0]) == Children:
-                tmp = Children()
-                for child in children:
-                    tmp += proc(child)
-                return tmp
-            return children
-        res = proc(self)
-        return res
+        def proc(children, out):
+            if isinstance(children, Children):
+                for cell in children:
+                    proc(cell, out)
+            else:
+                out.append(children)
+        res = []
+        proc(self.data, res)
+        return Children(res, copy=False, deep_make=False)
 
 
     def copy(self):
-        return Children(self.data, copy=True)
+        return Children(self.data, copy=True, deep_make=False)
 
 
     def shuffle(self):
@@ -96,23 +108,23 @@ class Children:
             else:
                 res.append(self.data.pop(idx))
         dfs(idx)
-        return Children(res, copy=False)
+        return Children(res, copy=False, deep_make=False)
             
 
     @staticmethod
-    def make(*child):
+    def make(*child, copy=True, deep_make=True):
         def proc(children):
             if hasattr(children[0], "__iter__"):
-                res = Children()
+                res = Children(copy=False, deep_make=False)
                 for child in children:
                     res.append(proc(child))
                 return res
-            return Children(children)
+            return Children(children, copy=copy, deep_make=deep_make)
         return proc(child)
 
     @property
     def abspaths(self):
-        return Children([child.abspath for child in self])
+        return Children([child.abspath for child in self], copy=False, deep_make=False)
     
     @property
     def super_dir_names(self):
@@ -120,7 +132,7 @@ class Children:
 
     
     def __add__(self, x):
-        return Children(self.data + x, False)
+        return Children(self.data + x, copy=False, deep_make=False)
     
 
     def __len__(self):
@@ -132,7 +144,7 @@ class Children:
     
     def __getitem__(self, idx):
         if isinstance(idx, slice):
-            return Children(self.data[idx], False)
+            return Children(self.data[idx], copy=False, deep_make=False)
         return self.data[idx]
 
     def __setitem__(self, k, v):

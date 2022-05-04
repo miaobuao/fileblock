@@ -1,9 +1,11 @@
 from typing import Iterable
 from Block import Block
 
+def deep_maker(x)->Children:...
+
 class Children:
 
-    def __init__(self, data=[], copy=True):
+    def __init__(self, data=[], copy=True, deep_make=True):
         self.data = [] # type:list[Block]
 
     def map(self, fn)->Children:
