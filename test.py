@@ -1,11 +1,13 @@
+from posixpath import abspath
+from site import abs_paths
 import fileblock as fb
 from fileblock import Block
 from fileblock.Children import Children
 from fileblock.btype import FILE
 import json
 
-block = Block("D:/GO/1_17_6/api")
-print(block.leaves.super_dir_names)
+block = Block("./")
+print(block.leaves.pop([1, [2, 3]]))
 # root = fb.Block("./")
 # print(root.children.map(f))
 # print(fb.unfold(1, 2, [4], [6, [7, [10]]]))
