@@ -120,7 +120,7 @@ class Children:
 
     
     def __add__(self, x):
-        return Children(super().__add__(x), False)
+        return Children(self.data + x, False)
     
 
     def __len__(self):
