@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: fileblock
-Version: 1.4.1.2022.5.5
+Version: 2.0.1.2022.6.13
 Summary: simplify file processing
 Home-page: http://github.com/miaobuao/fileblock
 Author: miaobuao
@@ -19,7 +19,7 @@ License-File: LICENSE
 
 简化文件处理 - *simplify file processing*
 
-<!-- [](https://github.com/miaobuao/fileblock/todo.md) -->
+
 ## Installing from pip
 
 pip 安装
@@ -34,16 +34,51 @@ pip install fileblock
 pip install fileblock -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
+
 ## How to use
 
 ```python
 import fileblock as fb
-from fileblock import Block, Children
+from fileblock import Block, Directory
 ```
+
+- [File Block](#file-block)
+  - [Installing from pip](#installing-from-pip)
+  - [How to use](#how-to-use)
+    - [Block](#block)
+      - [Block()](#block-1)
+      - [block.sub_block()](#blocksub_block)
+      - [block.append()](#blockappend)
+      - [block.join_path()](#blockjoin_path)
+      - [block.remove()](#blockremove)
+      - [block.moveTo()](#blockmoveto)
+      - [block.copyTo()](#blockcopyto)
+      - [block.cut()](#blockcut)
+      - [block.get_file_contents()](#blockget_file_contents)
+      - [block.leaves](#blockleaves)
+      - [block.isfile](#blockisfile)
+      - [block.isdir](#blockisdir)
+      - [block.exists](#blockexists)
+      - [block.children](#blockchildren)
+      - [block.btype](#blockbtype)
+    - [Directory](#directory)
+      - [directory.map()](#directorymap)
+      - [directory.to_json()](#directoryto_json)
+      - [directory.copy()](#directorycopy)
+      - [directory.shuffle()](#directoryshuffle)
+      - [directory.unfold()](#directoryunfold)
+      - [directory.append()](#directoryappend)
+      - [directory.extend()](#directoryextend)
+      - [directory.remove()](#directoryremove)
+      - [directory.pop()](#directorypop)
+      - [directory.extension_filter()](#directoryextension_filter)
+      - [super_dir_name](#super_dir_name)
+      - [directory.abspaths](#directoryabspaths)
+  - [License](#license)
 
 ### Block
 
-#### Create Block
+#### Block()
 
 ```python
 file_block = Block("./") # 创建一个Block
@@ -58,13 +93,13 @@ Tips:
   @path 不一定是真实存在的文件或者文件夹路径
 ```
 
-#### block.sub_block(path)
+#### block.sub_block()
 
 | 参数 | 类型   | 返回值 | 描述                    |
 | ---- | ------ | ------ | -----------------------|
 | path | string | Block  | 相对于 block 的相对路径 |
 
-#### block.append(name, type=FILE)
+#### block.append()
 
 | 参数 | 类型   | 描述                    |
 | ---- | ------ | -----------------------|
@@ -78,7 +113,7 @@ Tips:
     当type == FILE时，若name形如x1/x2, 则会新建x1文件夹，返回的是x2的Block对象，而不是x1
 ```
 
-#### block.join_path(path)
+#### block.join_path()
 
 | 参数 | 类型   |描述                    |
 | ---- | ------ |-----------------------|
@@ -92,7 +127,7 @@ Tips:
 
 如果该 block 对象是真实存在的文件/文件夹, 则从磁盘上永久删除该文件/文件夹
 
-#### block.moveTo(target)
+#### block.moveTo()
 
 | 参数 | 类型   |描述                    |
 | ---- | ------ |-----------------------|
@@ -100,7 +135,7 @@ Tips:
 
 如果block存在，则会把其中的文件与文件夹移动到target对应的文件夹内
 
-#### block.copyTo(target: Block)
+#### block.copyTo()
 
 | 参数 | 类型   |描述                    |
 | ---- | ------ |-----------------------|
@@ -108,7 +143,7 @@ Tips:
 
 把 Block 及其 Children 都拷贝如 target 中
 
-#### block.cut(\*rates:int|float)->list[Children]
+#### block.cut()
 
 | 参数 | 类型   |描述                    |
 | ---- | ------ |-----------------------|
@@ -122,7 +157,7 @@ Tips:
 
 返回值时一个列表，其中的元素是划分好的Children类型
 
-#### block.get_file_contents() -> bytes
+#### block.get_file_contents()
 
 如果block时文件，则返回该文件的bytes内容
 
@@ -130,43 +165,56 @@ Tips:
 
 Block文件树的叶子节点构成的[Children](#children)集合
 
-#### block.isfile -> bool
+#### block.isfile
 
 当block存在，且为文件时等于True
 
-#### block.isdir -> bool
+#### block.isdir
 
 当block存在，且为文件夹时为True
 
-#### block.exists -> bool
+#### block.exists
 
 当block存在时为True
 
-#### block.children -> Children[Block]
+#### block.children
 
 返回block对象包含的子文件与子文件夹构成的[Children](#children)集合
 
-#### block.btype ->  __FILE | __DIR | None
+#### block.btype
 
 返回该Block对象的类型 ```FILE``` | ```DIR``` | ```None```
-### Children
 
-*Children类继承自list*
-#### children.abspaths -> list[str]
+
+### Directory
+
+#### directory.map()
+
+#### directory.to_json()
+
+#### directory.copy()
+
+#### directory.shuffle()
+
+返回打乱顺序的Directory，不改变本身内容
+
+#### directory.unfold()
+
+#### directory.append()
+
+#### directory.extend()
+
+#### directory.remove()
+
+#### directory.pop()
+
+#### directory.extension_filter()
+
+#### super_dir_name
+
+#### directory.abspaths
 
 返回所有Block的绝对路径
-
-#### children.shuffle -> Children:
-
-返回打乱顺序的Children，不改变本身内容
-
-#### 加法
-
-```python
-c1 = Children()
-c2 = Children()
-c3 = c1 + c2 # type(c3) == Children
-```
 
 ## License
 

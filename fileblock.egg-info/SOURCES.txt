@@ -3,7 +3,7 @@ README.md
 setup.py
 fileblock/Abstrcat.py
 fileblock/Block.py
-fileblock/Children.py
+fileblock/Directory.py
 fileblock/__init__.py
 fileblock/__version__.py
 fileblock/btype.py
