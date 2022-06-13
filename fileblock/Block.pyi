@@ -1,6 +1,6 @@
 from os.path import split, splitext, isfile, exists, join, isdir, abspath
 from os import listdir, makedirs, mkdir, remove, rmdir
-from .Children import Children
+from .Directory import Directory
 from .btype import FILE, DIR
 import shutil
 from .Abstrcat import Abstract
@@ -52,12 +52,15 @@ class Block:
         '''
         pass
 
-    
-    @property
-    def leaves(self) -> Children:
+    def search(self, name, type=None)->Directory:
+        '''
+            在block内进行搜索，返回所有匹配的文件/文件夹
+            
+            可选参数type的值应为 fileblock.FILE 或 fileblock.DIR
+        '''
         pass
 
-    def cut(self, *rates:int|float)->list[Children]:
+    def cut(self, *rates:int|float)->Directory[Directory]:
         '''
             切割文件夹内的文件块
             @parameter - rates 分割比例，可以是整数，也可以是浮点数
@@ -69,6 +72,32 @@ class Block:
             如果Block是文件，则返回文件的bytes
         '''
         pass
+    
+    def enter(self, path)->Block:...
+
+    @property
+    def children(self) -> Directory:...
+
+    @property
+    def path(self)->str:...
+    
+    @property
+    def leaves(self)->Directory:...
+
+    @property
+    def abspath(self)->str:...
+    
+    @property
+    def directory(self)->str:...
+    
+    @property
+    def file_full_name(self)->str:...
+    
+    @property
+    def filename(self)->str:...
+    
+    @property
+    def extension(self)->str:...
 
     @property
     def isfile(self) -> bool:
@@ -92,14 +121,10 @@ class Block:
         pass
     
     @property
-    def children(self) -> Children[Block]:
-        pass
-
-    
-    @property
     def btype(self):
         pass
     
+    @property
     def abstract(self, force_abspath=False)->Abstract:
         '''
             返回一个Abstract对象,包含了该Block的基本文件信息

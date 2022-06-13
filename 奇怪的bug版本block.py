@@ -139,9 +139,9 @@ class Block:
                 acc += idx
         return res
     
-    def get_file_contents(self, mode='rb', encoding=None):
+    def get_file_contents(self):
         if self.isfile:
-            with open(self.path, 'rb', encoding=encoding) as f:
+            with open(self.path, 'rb') as f:
                 d = f.read()
             return d
         raise TypeError("This block is not a file-type block")
@@ -152,11 +152,12 @@ class Block:
 
     @property
     def children(self):
-        res = Directory()
+        res = Directory(copy=False)
         if self.isdir:
             dirs = listdir(self.path)
             for dir in dirs:
-                res.append(self.sub_block(dir))
+                sub = self.sub_block(dir)
+                res.append(sub)
         return res
 
     @property
@@ -169,13 +170,13 @@ class Block:
         返回文件树中的所有叶子节点
         '''
         children = self.children
+        res = Directory(copy=False)
         if len(children) > 0:
-            res = Directory()
             for child in children:
                 res.extend(child.leaves)
-            return res
         else:
-            return Directory([self])
+            res.append(self)
+        return res
 
     @property
     def abspath(self):

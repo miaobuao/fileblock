@@ -14,3 +14,5 @@
 - [ ] Block.tree: print file tree in console
 - [ ] Block.size: return block size in disk
 - [ ] Block.enter: update block to new path
+- [ ] Children.replace:  根据字典 替换self.data内容
+

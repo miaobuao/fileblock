@@ -4,7 +4,10 @@
 
 简化文件处理 - *simplify file processing*
 
-<!-- [](https://github.com/miaobuao/fileblock/todo.md) -->
+
+
+
+
 ## Installing from pip
 
 pip 安装
@@ -19,6 +22,8 @@ pip install fileblock
 pip install fileblock -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
+
+
 ## How to use
 
 ```python
@@ -26,7 +31,24 @@ import fileblock as fb
 from fileblock import Block, Children
 ```
 
++ [Block](#Block)
++ [Children](#Children)
+
+
+
 ### Block
+
++ [创建Block](#create block)
++ [block.sub_block](#block.sub_block)
++ [block.append](#block.append)
++ [block.join_path](#block.join_path)
++ [block.remove](#block.remove)
++ [block.moveTo](#block.moveTo)
++ [block.copyTo](#block.copyTo)
++ [block.cut](#block.cut)
++ [block.get_file_contents](#block.get_file_contents)
++ [block.leaves](#block.leaves)
++ [block.isfile](#block.isfile)
 
 #### Create Block
 
@@ -43,13 +65,13 @@ Tips:
   @path 不一定是真实存在的文件或者文件夹路径
 ```
 
-#### block.sub_block(path)
+#### block.sub_block
 
 | 参数 | 类型   | 返回值 | 描述                    |
 | ---- | ------ | ------ | -----------------------|
 | path | string | Block  | 相对于 block 的相对路径 |
 
-#### block.append(name, type=FILE)
+#### block.append
 
 | 参数 | 类型   | 描述                    |
 | ---- | ------ | -----------------------|
@@ -63,7 +85,7 @@ Tips:
     当type == FILE时，若name形如x1/x2, 则会新建x1文件夹，返回的是x2的Block对象，而不是x1
 ```
 
-#### block.join_path(path)
+#### block.join_path
 
 | 参数 | 类型   |描述                    |
 | ---- | ------ |-----------------------|
@@ -71,13 +93,13 @@ Tips:
 
 返回拼接后的路径
 
-#### block.remove()
+#### block.remove
 
 说明：
 
 如果该 block 对象是真实存在的文件/文件夹, 则从磁盘上永久删除该文件/文件夹
 
-#### block.moveTo(target)
+#### block.moveTo
 
 | 参数 | 类型   |描述                    |
 | ---- | ------ |-----------------------|
@@ -85,7 +107,7 @@ Tips:
 
 如果block存在，则会把其中的文件与文件夹移动到target对应的文件夹内
 
-#### block.copyTo(target: Block)
+#### block.copyTo
 
 | 参数 | 类型   |描述                    |
 | ---- | ------ |-----------------------|
@@ -93,7 +115,7 @@ Tips:
 
 把 Block 及其 Children 都拷贝如 target 中
 
-#### block.cut(\*rates:int|float)->list[Children]
+#### block.cut
 
 | 参数 | 类型   |描述                    |
 | ---- | ------ |-----------------------|
@@ -107,7 +129,7 @@ Tips:
 
 返回值时一个列表，其中的元素是划分好的Children类型
 
-#### block.get_file_contents() -> bytes
+#### block.get_file_contents
 
 如果block时文件，则返回该文件的bytes内容
 
@@ -115,28 +137,32 @@ Tips:
 
 Block文件树的叶子节点构成的[Children](#children)集合
 
-#### block.isfile -> bool
+#### block.isfile
 
 当block存在，且为文件时等于True
 
-#### block.isdir -> bool
+#### block.isdir
 
 当block存在，且为文件夹时为True
 
-#### block.exists -> bool
+#### block.exists
 
 当block存在时为True
 
-#### block.children -> Children[Block]
+#### block.children
 
 返回block对象包含的子文件与子文件夹构成的[Children](#children)集合
 
-#### block.btype ->  __FILE | __DIR | None
+#### block.btype
 
 返回该Block对象的类型 ```FILE``` | ```DIR``` | ```None```
+
+
+
+
+
 ### Children
 
-*Children类继承自list*
 #### children.abspaths -> list[str]
 
 返回所有Block的绝对路径

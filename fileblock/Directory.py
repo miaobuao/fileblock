@@ -1,5 +1,6 @@
 from random import random
 import json
+from . import Block
 from .btype import __BaseType__
 
 def deep_maker(x):
@@ -7,15 +8,15 @@ def deep_maker(x):
         res = []
         for cell in x:
             res.append(deep_maker(cell))
-        return Children(res, copy=False, deep_make=False)
+        return Directory(res, copy=False, deep_make=False)
     else:
         return x
 
 
-class Children:
+class Directory:
 
     def __init__(self, data=[], copy=True, deep_make=False):
-        if isinstance(data, Children):
+        if isinstance(data, Directory):
             data = data.data
         if deep_make:
             data = deep_maker(data)
@@ -27,17 +28,22 @@ class Children:
 
     def map(self, fn):
         def dfs(x):
-            return Children([
-                dfs(cell) if isinstance(x, Children) else fn(cell)
+            return Directory([
+                dfs(cell) if isinstance(cell, Directory) else fn(cell)
                 for cell in x
             ], copy=False, deep_make=False)
         return dfs(self)
-        
+
 
     def to_json(self, fpath: str, file_only=False, dir_only=False, abspath = False, indent=None, encoding="utf8"):
-        """注：若file_only 和 dir_only 同时为 True 则 全都输出."""
+        """
+            注: 若file_only 和 dir_only 同时为 True 则 全都输出.
+
+            tips: if `file_only` == `dir_only` == True,
+                    then output is all.
+        """
         def convert(child):
-            if type(child) == Children:
+            if type(child) == Directory:
                 res = []
                 for c in child:
                     tmp = convert(c)
@@ -60,18 +66,18 @@ class Children:
 
     def unfold(self):
         def proc(children, out):
-            if isinstance(children, Children):
+            if isinstance(children, Directory):
                 for cell in children:
                     proc(cell, out)
             else:
                 out.append(children)
         res = []
         proc(self.data, res)
-        return Children(res, copy=False, deep_make=False)
+        return Directory(res, copy=False, deep_make=False)
 
 
     def copy(self):
-        return Children(self.data, copy=True, deep_make=False)
+        return Directory(self.data, copy=True, deep_make=False)
 
 
     def shuffle(self):
@@ -98,33 +104,40 @@ class Children:
         return self
 
 
-    def pop(self, *idx):
-        # TODO: 应该从后往前pop，保持pop的正确性
-        res = []
-        def dfs(idx):
-            if hasattr(idx, "__iter__"):
-                for i in idx:
-                    dfs(i)
-            else:
-                res.append(self.data.pop(idx))
-        dfs(idx)
-        return Children(res, copy=False, deep_make=False)
+    def pop(self, idx):
+        return self.data.pop(idx)
+    
+    def extension_filter(self, *extensions):
+        rep_ext = [ 
+            '.' + e
+            for e in extensions
+            if e[0] != '.'
+        ]
+        def dfs(x: Directory):
+            return Directory([
+                dfs(cell) if hasattr(cell, "__iter__") else cell
+                for cell in x
+                if hasattr(cell, "__iter__") or
+                    (type(cell) == Block.Block and
+                    (cell.extension in extensions or cell.extension in rep_ext))
+            ], copy=False, deep_make=False)
+        return dfs(self)
             
 
     @staticmethod
     def make(*child, copy=True, deep_make=True):
         def proc(children):
             if hasattr(children[0], "__iter__"):
-                res = Children(copy=False, deep_make=False)
+                res = Directory(copy=False, deep_make=False)
                 for child in children:
                     res.append(proc(child))
                 return res
-            return Children(children, copy=copy, deep_make=deep_make)
+            return Directory(children, copy=copy, deep_make=deep_make)
         return proc(child)
 
     @property
     def abspaths(self):
-        return Children([child.abspath for child in self], copy=False, deep_make=False)
+        return Directory([child.abspath for child in self], copy=False, deep_make=False)
     
     @property
     def super_dir_names(self):
@@ -132,7 +145,7 @@ class Children:
 
     
     def __add__(self, x):
-        return Children(self.data + x, copy=False, deep_make=False)
+        return Directory(self.data + x, copy=False, deep_make=False)
     
 
     def __len__(self):
@@ -144,7 +157,7 @@ class Children:
     
     def __getitem__(self, idx):
         if isinstance(idx, slice):
-            return Children(self.data[idx], copy=False, deep_make=False)
+            return Directory(self.data[idx], copy=False, deep_make=False)
         return self.data[idx]
 
     def __setitem__(self, k, v):
@@ -160,7 +173,7 @@ class Children:
 
 if __name__  == "__main__":
 
-    c = Children([1, 2, 3])
-    x = c + Children([2, 3, 4])
+    c = Directory([1, 2, 3])
+    x = c + Directory([2, 3, 4])
     print(x)
     

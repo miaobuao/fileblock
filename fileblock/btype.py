@@ -16,19 +16,6 @@ class __BaseType__:
             return __o.name == self.name
         return False
 
-# class __DirType__(__BaseType__):
-    
-#     def __init__(self) -> None:
-#         super().__init__("Dir")
-
-# class __FileType__(__BaseType__):
-    
-#     def __init__(self) -> None:
-#         super().__init__("File")
-
-
-# FILE = __FileType__()
-# DIR = __DirType__()
 
 FILE = __BaseType__("File")
 DIR = __BaseType__("Dir")

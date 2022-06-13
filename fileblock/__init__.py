@@ -1,18 +1,18 @@
 from .Block import Block
-from .Children import Children
+from .Directory import Directory
 from .btype import FILE, DIR
 from .utils import *
-def make_children(*child) -> Children:
-    return Children.make(child)
+def make_children(*child) -> Directory:
+    return Directory.make(child)
 
 def unfold(*iter):
-    def f(iter):
-        res = Children()
+    def fn(iter):
+        res = Directory(copy=False)
         for cell in iter:
             if hasattr(cell, "__iter__"):
-                res += f(cell)
+                res += fn(cell)
             else:
                 res.append(cell)
         return res
-    return f(iter)
+    return fn(iter)
 
