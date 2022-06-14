@@ -141,7 +141,7 @@ class Block:
     
     def get_file_contents(self, mode='rb', encoding=None):
         if self.isfile:
-            with open(self.path, 'rb', encoding=encoding) as f:
+            with open(self.path, mode, encoding=encoding) as f:
                 d = f.read()
             return d
         raise TypeError("This block is not a file-type block")
