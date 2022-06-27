@@ -1,6 +1,8 @@
+from io import TextIOWrapper
 from .Directory import Directory
 from .Block import Block
 from .btype import DIR, FILE, __BaseType__
+import json
 
 def get_path(children:Directory, force_abs=False):
     """返回Children内所有block的路径"""
@@ -45,3 +47,15 @@ def remove(target:Directory):
         target.remove()
     else:
         raise ValueError(target," cannot be removed!")
+
+
+def save_json(obj, fp, encoding="utf8", indent=None, ensure_ascii=False):
+    t = type(fp)
+    
+    if t == str:
+        f = open(fp, 'w+', encoding=encoding)
+        fp = f
+    elif t != TextIOWrapper:
+        raise ValueError("`fp`: except TextIOWrapper|str, got", t)
+
+    json.dump(obj, fp, ensure_ascii=ensure_ascii, indent=indent)

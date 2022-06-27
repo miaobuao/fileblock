@@ -1,5 +1,6 @@
+import os
 from os.path import split, splitext, isfile, exists, join, isdir, abspath
-from os import listdir, makedirs, mkdir, remove, rmdir
+from os import listdir, makedirs, remove, rmdir
 from .Directory import Directory
 from .Abstrcat import Abstract
 from .btype import FILE, DIR
@@ -23,21 +24,24 @@ class Block:
         sub_path = self.join_path(path)
         return Block(sub_path)
     
-    def append(self, name, type=FILE):
+    def append(self, sub_block):
         '''
-            往block中新增一个文件/文件夹
+            往block中新增一个文件/文件夹(Block对象)
 
             TIPS:
                 当type == FILE时，若name形如x1/x2, 则会新建x1文件夹，返回的是x2的Block对象，而不是x1
         '''
+        # sub_block = sub_block # type:Block
+        name = sub_block.file_full_name
         path = self.join_path(name)
-        if type == FILE:
+        if sub_block.isfile:
             dir_name, _ = split(path)
             if not exists(dir_name):
                 makedirs(dir_name)
-            with open(path, 'w+') as f:
-                pass
-        elif type == DIR:
+            with open(path, 'wb+') as f:
+                content = sub_block.get_file_contents()
+                f.write(content)
+        elif sub_block.isdir:
             makedirs(path)
         return Block(path)
 
@@ -157,6 +161,12 @@ class Block:
             dirs = listdir(self.path)
             for dir in dirs:
                 res.append(self.sub_block(dir))
+        elif self.isfile:
+            raise Exception("Block file type has not children.")
+        elif not self.exists:
+            raise Exception("Block not exists has not children.")
+        else:
+            raise Exception("Block unknown type has not children.")
         return res
 
     @property
@@ -166,16 +176,14 @@ class Block:
     @property
     def leaves(self):
         '''
-        返回文件树中的所有叶子节点
+        返回文件树中的所有叶子节点(file)
         '''
-        children = self.children
-        if len(children) > 0:
-            res = Directory()
-            for child in children:
-                res.extend(child.leaves)
-            return res
-        else:
-            return Directory([self])
+        res = Directory(copy=False)
+        for dir, _, file_names in os.walk(self.path):
+            for fname in file_names:
+                path = os.path.join(dir, fname)
+                res.append(Block(path))
+        return res
 
     @property
     def abspath(self):

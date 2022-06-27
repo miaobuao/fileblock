@@ -1,8 +1,5 @@
-from os.path import split, splitext, isfile, exists, join, isdir, abspath
-from os import listdir, makedirs, mkdir, remove, rmdir
 from .Directory import Directory
 from .btype import FILE, DIR
-import shutil
 from .Abstrcat import Abstract
 class Block:
 
@@ -20,9 +17,9 @@ class Block:
         '''
         pass
     
-    def append(self, name, type=FILE)->Block:
+    def append(self, sub_block:Block)->Block:
         '''
-            往block中新增一个文件/文件夹
+            往block中新增一个文件/文件夹(Block对象)
 
             TIPS:
                 当type == FILE时，若name形如x1/x2, 则会新建x1文件夹，返回的是x2的Block对象，而不是x1
